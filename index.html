@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Motors - Catálogo de Veículos</title>
+    <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #18181b, #27272a);
+            --bg-header: #27272a;
+            --bg-card: #1e1e24;
+            --text-main: #fefce8;
+            --text-muted: #d4d4d8;
+            --border-color: #ca8a04;
+            --accent-yellow: #eab308;
+            --accent-yellow-bright: #facc15;
+            --input-bg: #fef9c3;
+            --input-text: #000000;
+            --btn-sec-bg: #3f3f46;
+        }
+
+        /* Variáveis para o Modo Claro */
+        body.modo-claro {
+            --bg-body: linear-gradient(135deg, #f4f4f5, #e4e4e7);
+            --bg-header: #ffffff;
+            --bg-card: #ffffff;
+            --text-main: #18181b;
+            --text-muted: #3f3f46;
+            --border-color: #eab308;
+            --accent-yellow: #eab308;
+            --accent-yellow-bright: #ca8a04;
+            --input-bg: #fefce8;
+            --input-text: #18181b;
+            --btn-sec-bg: #f4f4f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-body);
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Container principal do Cabeçalho + Capa */
+        header {
+            max-width: 1400px;
+            margin: 0 auto 30px auto;
+            background-color: var(--bg-header);
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        /* BARRA SUPERIOR DO CABEÇALHO (Logo, Modo Claro, Login e Carrinho) */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px;
+            background-color: #18181b;
+            border-bottom: 2px solid #eab308;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo-marca {
+            color: #facc15;
+            font-size: 1.35rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-decoration: none;
+        }
+
+        .nav-direito {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-nav {
+            background-color: #27272a;
+            color: #facc15;
+            border: 1.5px solid #ca8a04;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-nav:hover {
+            background-color: #eab308;
+            color: #18181b;
+        }
+
+        .badge-carrinho {
+            background-color: #eab308;
+            color: #18181b;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .btn-nav:hover .badge-carrinho {
+            background-color: #18181b;
+            color: #facc15;
+        }
+
+        /* FOTO DE CAPA NO TOPO */
+        .capa-banner {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            background-color: #18181b;
+            border-bottom: 2px solid #eab308;
+            overflow: hidden;
+        }
+
+        .capa-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.82);
+            transition: transform 0.3s ease;
+        }
+
+        .capa-banner:hover img {
+            transform: scale(1.02);
+        }
+
+        .capa-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(24, 24, 27, 0.9) 0%, rgba(24, 24, 27, 0.2) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px 28px;
+        }
+
+        .capa-overlay h1 {
+            color: #facc15;
+            font-size: 1.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .capa-overlay p {
+            color: #fefce8;
+            font-size: 0.95rem;
+            margin-top: 4px;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .btn-alterar-capa {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background-color: rgba(24, 24, 27, 0.85);
+            color: #facc15;
+            border: 1px solid #eab308;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
+        }
+
+        .btn-alterar-capa:hover {
+            background-color: #eab308;
+            color: #18181b;
+        }
+
+        /* BARRA DE PESQUISA E CADASTRO ABAIXO DA CAPA */
+        .barra-controles {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 260px;
+            max-width: 600px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-container input::placeholder {
+            color: #854d0e;
+        }
+
+        .search-container input:focus {
+            border-color: #facc15;
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.25);
+        }
+
+        .btn-admin {
+            background-color: #eab308;
+            color: #18181b;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: background 0.2s, transform 0.2s;
+            border: 2px solid #eab308;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-admin:hover {
+            background-color: #facc15;
+            transform: translateY(-1px);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .secao-categoria {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: var(--accent-yellow-bright);
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid rgba(202, 138, 4, 0.35);
+            padding-bottom: 10px;
+        }
+
+        .grid-catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card-produto {
+            background-color: var(--bg-card);
+            border: 2px solid #eab308;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .card-produto:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-produto img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 2px solid #eab308;
+        }
+
+        .card-conteudo {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-produto h3 {
+            color: var(--accent-yellow-bright);
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .card-produto .preco {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .card-produto p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            flex-grow: 1;
+            white-space: pre-wrap;
+            margin-bottom: 14px;
+        }
+
+        .btn-comprar {
+            background-color: #eab308;
+            color: #18181b;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .btn-comprar:hover {
+            background-color: #facc15;
+        }
+
+        .sem-produtos {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 30px;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            border: 2px dashed #ca8a04;
+            grid-column: 1 / -1;
+        }
+
+        /* MODAIS (Login e Carrinho) */
+        .modal-fundo {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-caixa {
+            background-color: #eab308;
+            color: #18181b;
+            padding: 28px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            border: 2px solid #facc15;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+        }
+
+        .modal-caixa h3 {
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #18181b;
+            padding-bottom: 8px;
+        }
+
+        .modal-caixa label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .modal-caixa input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 2px solid #ca8a04;
+            background-color: #fef9c3;
+            color: #000;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .modal-botoes {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-botoes button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-modal-confirmar {
+            background-color: #18181b;
+            color: #facc15;
+        }
+
+        .btn-modal-fechar {
+            background-color: transparent;
+            color: #18181b;
+            border: 2px solid #18181b !important;
+        }
+
+        .lista-carrinho-itens {
+            max-height: 240px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .item-carrinho-linha {
+            background-color: #fef9c3;
+            padding: 10px 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn-remover-item {
+            background-color: #991b1b;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- CABEÇALHO COMPLETO -->
+    <header>
+        <!-- Barra Superior: Marca, Modo Claro, Login e Carrinho -->
+        <nav class="top-navbar">
+            <a href="index.html" class="logo-marca">Elite Motors</a>
+
+            <div class="nav-direito">
+                <button type="button" class="btn-nav" id="btn-tema" onclick="alternarTema()">
+                    Modo Claro
+                </button>
+                <button type="button" class="btn-nav" id="btn-login-topo" onclick="abrirModalLogin()">
+                    Login
+                </button>
+                <button type="button" class="btn-nav" onclick="abrirModalCarrinho()">
+                    Carrinho <span class="badge-carrinho" id="contador-carrinho">0</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Foto de Capa Larga -->
+        <div class="capa-banner">
+            <img id="img-capa" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=80" alt="Capa Elite Motors">
+            <div class="capa-overlay">
+                <h1>Elite Motors</h1>
+                <p>Os melhores veículos em estoque, seminovos e usados selecionados</p>
+            </div>
+        </div>
+
+        <!-- Barra de Pesquisa e Cadastro Administrativo -->
+        <div class="barra-controles">
+            <div class="search-container">
+                <input type="text" id="input-pesquisa" placeholder="Pesquisar veículos por nome ou especificação...">
+            </div>
+
+            
+            
+            
+            <button type="button" onclick="window.location.href='cadiprodutos.html'"> 
+                cadastro de produtos
+            </button>
+    
+
+        </div>
+    </header>
+
+    <main>
+        <!-- SEÇÃO: CARROS EM ESTOQUE (6 imagens) -->
+        <section class="secao-categoria">
+            <h2>Carros em Estoque</h2>
+            <div class="grid-catalogo" id="grid-estoque"></div>
+        </section>
+
+        <!-- SEÇÃO: CARROS SEMINOVOS (6 imagens) -->
+        <section class="secao-categoria">
+            <h2>Carros Seminovos</h2>
+            <div class="grid-catalogo" id="grid-seminovos"></div>
+        </section>
+
+        <!-- SEÇÃO: CARROS USADOS (6 imagens) -->
+        <section class="secao-categoria">
+            <h2>Carros Usados</h2>
+            <div class="grid-catalogo" id="grid-usados"></div>
+        </section>
+    </main>
+
+    <!-- MODAL DE LOGIN DO CLIENTE -->
+    <div class="modal-fundo" id="modal-login">
+        <div class="modal-caixa">
+            <h3>Acesso do Cliente</h3>
+            <form id="form-login-cliente" autocomplete="off">
+                <label for="cliente-usuario">Usuário ou E-mail</label>
+                <input type="password" id="cliente-usuario" required>
+
+                <label for="cliente-senha">Senha</label>
+                <input type="password" id="cliente-senha" required>
+
+                <div class="modal-botoes">
+                    <button type="submit" class="btn-modal-confirmar">Entrar</button>
+                    <button type="button" class="btn-modal-fechar" onclick="fecharModal('modal-login')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DO CARRINHO DE COMPRAS -->
+    <div class="modal-fundo" id="modal-carrinho">
+        <div class="modal-caixa">
+            <h3>Carrinho de Compras</h3>
+            <div class="lista-carrinho-itens" id="lista-carrinho-itens"></div>
+            <div class="modal-botoes">
+                <button type="button" class="btn-modal-confirmar" onclick="finalizarReserva()">Reservar Veículos</button>
+                <button type="button" class="btn-modal-fechar" onclick="fecharModal('modal-carrinho')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+        const carrosEstoque = [
+            { nome: "vw jetta", preco: "38.000", imagem: "https://autos.hamariweb.com/images/carimages/AAevC86.jpg", descricao: "Excelente estado, mecânica revisada e documentação em dia." },
+            { nome: "VW golf gti", preco: "79.900", imagem: "https://tse1.mm.bing.net/th/id/OIP.zR4FQddsFVdhSEP26S4kIAAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", descricao: "Completo com teto solar, painel digital e rodas de liga leve." },
+            { nome: "audi r8", preco: "68.500", imagem: "https://tse3.mm.bing.net/th/id/OIP.rB0ZFp1MXB7i5VrDWAQBCAHaEv?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", descricao: "Baixo KM, único dono, chave presencial e multimídia." },
+            { nome: "prosche cayne", preco: "55.000", imagem: "https://cdn.motor1.com/images/mgl/8AvgvB/s1/2025-porsche-cayenne-gts.jpg", descricao: "Econômico, ideal para o dia a dia na cidade com conforto." },
+            { nome: "bmw", preco: "62.000", imagem: "https://th.bing.com/th/id/R.5a8c88d53e058f818e930f3c69582b8a?rik=frPgySa2MM1YYQ&pid=ImgRaw&r=0", descricao: "Multimídia bluelink e sensor de estacionamento traseiro." },
+            { nome: "mercedes", preco: "105.000", imagem: "https://bringatrailer.com/wp-content/uploads/2023/08/2010_mercedes-benz_e350-sedan_mg_3152-08042.jpg", descricao: "Conforto e confiabilidade incomparável da marca." }
+        ];
+
+        const carrosSeminovos = [
+            { nome: "corolla", preco: "94.000", imagem: "https://th.bing.com/th/id/R.afb958801edffe4139a7e1725eb8bb4d?rik=ZR8QwCc9GG5k4A&pid=ImgRaw&r=0", descricao: "Ano recente, IPVA pago, garantia de fábrica." },
+            { nome: "Jeep Renegade ", preco: "89.000", imagem: "https://tse1.mm.bing.net/th/id/OIP.iaQRXaUNuxn6Fzy29_6_wQHaDu?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", descricao: "SUV robusto, câmbio automático, pneus novos." },
+            { nome: "saveiro", preco: "125.000", imagem: "https://th.bing.com/th/id/R.4587cc2727aa9201249e6c9e51730acf?rik=UvKZuXz0LtEEuw&pid=ImgRaw&r=0", descricao: "O esportivo mais desejado, interior impecável." },
+            { nome: "Nissan", preco: "82.000", imagem: "https://carroscomcamanzi.com.br/wp-content/uploads/2022/09/Kicks-2023.jpg", descricao: "Câmera 360º, revisões feitas na concessionária." },
+            { nome: "fiat mobi", preco: "88.000", imagem: "https://tse1.mm.bing.net/th/id/OIP.hFBOV8H-NlpcH22H7enU2gHaFL?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", descricao: "Espaçoso, econômico e muito completo de série." },
+            { nome: "logan", preco: "84.000", imagem: "https://th.bing.com/th/id/R.63afb26e74b6b138ac75eb134e4dbeaa?rik=K262unljqFhzww&pid=ImgRaw&r=0", descricao: "Design moderno, conectividade avançada e versatilidade." }
+        ];
+
+        const carrosUsados = [
+            { nome: "VW Gol G4 ", preco: "22.000", imagem: "https://http2.mlstatic.com/D_NQ_NP_677811-MLA48321006867_112021-W.jpg", descricao: "Mecânica rigorosamente em dia, super econômico." },
+            { nome: "fiat uno", preco: "25.500", imagem: "https://th.bing.com/th/id/R.0acc2576df49405e14d9368c49c83aa8?rik=vQhWLRm3spDFCQ&pid=ImgRaw&r=0", descricao: "Ar condicionado gelando, vidros e travas elétricas." },
+            { nome: "chervolet corsa", preco: "21.000", imagem: "https://tse4.mm.bing.net/th/id/OIP.0R5iwZ0XAvHPKUc3aF8_qgHaFB?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", descricao: "Ótimo custo-benefício, econômico e espaçoso." },
+            { nome: "Fiat Palio ", preco: "23.000", imagem: "https://tse2.mm.bing.net/th/id/OIP.SmevuEQUhRf9OcyjrhY6sAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", descricao: "Manutenção super barata e confiável para o dia a dia." },
+            { nome: "Renault Sandero ", preco: "29.000", imagem: "https://revistacarro.com.br/wp-content/uploads/2021/11/Sandero-S-Edition-2022_2-1280x768.jpg", descricao: "Espaço interno excelente e porta-malas de grande capacidade." },
+            { nome: "hb20", preco: "45.000", imagem: "https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/hb20_sport_03-e1591298309953.jpg?resize=420", descricao: "Conhecido pela durabilidade extrema, mecânica sólida." }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restaura tema claro se estava ativo
+            if (localStorage.getItem('temaClaro') === 'true') {
+                document.body.classList.add('modo-claro');
+                document.getElementById('btn-tema').textContent = 'Modo Escuro';
+            }
+
+            // Restaura login do usuário se estiver logado
+            const usuarioSalvo = localStorage.getItem('usuarioLogado');
+            if (usuarioSalvo) {
+                document.getElementById('btn-login-topo').textContent = `Olá, ${usuarioSalvo}`;
+            }
+
+            // Carrega foto de capa personalizada
+            const capaSalva = localStorage.getItem('fotoCapa');
+            if (capaSalva) {
+                document.getElementById('img-capa').src = capaSalva;
+            }
+
+            atualizarContadorCarrinho();
+            renderizarSecoes();
+
+            document.getElementById('input-pesquisa').addEventListener('input', (e) => {
+                renderizarSecoes(e.target.value);
+            });
+        });
+
+        // Alternar Modo Claro / Modo Escuro
+        function alternarTema() {
+            const isClaro = document.body.classList.toggle('modo-claro');
+            localStorage.setItem('temaClaro', isClaro);
+            document.getElementById('btn-tema').textContent = isClaro ? 'Modo Escuro' : 'Modo Claro';
+        }
+
+        // Controle do Modal de Login
+        function abrirModalLogin() {
+            const usuarioAtual = localStorage.getItem('usuarioLogado');
+            if (usuarioAtual) {
+                if (confirm(`Deseja sair da conta de ${usuarioAtual}?`)) {
+                    localStorage.removeItem('usuarioLogado');
+                    document.getElementById('btn-login-topo').textContent = 'Login';
+                }
+                return;
+            }
+            document.getElementById('modal-login').style.display = 'flex';
+        }
+
+        document.getElementById('form-login-cliente').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('cliente-usuario').value.trim();
+            if (usuario) {
+                localStorage.setItem('usuarioLogado', usuario);
+                document.getElementById('btn-login-topo').textContent = `Olá, ${usuario}`;
+                this.reset();
+                fecharModal('modal-login');
+            }
+        });
+
+        function fecharModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Alterar foto de capa
+        function alterarFotoCapa() {
+            const novaUrl = prompt("Cole o link (URL) da nova foto de capa:");
+            if (novaUrl && novaUrl.trim() !== "") {
+                document.getElementById('img-capa').src = novaUrl.trim();
+                localStorage.setItem('fotoCapa', novaUrl.trim());
+            }
+        }
+
+        // Renderizar colunas de carros
+        function renderizarSecoes(termoBusca = '') {
+            const produtosSalvos = JSON.parse(localStorage.getItem('produtos')) || [];
+            
+            const estoqueCompleto = [...produtosSalvos, ...carrosEstoque].slice(0, 6);
+            const seminovosCompleto = [...carrosSeminovos].slice(0, 6);
+            const usadosCompleto = [...carrosUsados].slice(0, 6);
+
+            preencherGrid('grid-estoque', estoqueCompleto, termoBusca);
+            preencherGrid('grid-seminovos', seminovosCompleto, termoBusca);
+            preencherGrid('grid-usados', usadosCompleto, termoBusca);
+        }
+
+        function preencherGrid(elementId, listaCarros, termo) {
+            const grid = document.getElementById(elementId);
+            const filtrados = listaCarros.filter(c => 
+                c.nome.toLowerCase().includes(termo.toLowerCase()) || 
+                c.descricao.toLowerCase().includes(termo.toLowerCase())
+            );
+
+            if (filtrados.length === 0) {
+                grid.innerHTML = `<div class="sem-produtos"><p>Nenhum veículo encontrado nesta seção.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = '';
+            filtrados.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = 'card-produto';
+                card.innerHTML = `
+                    <img src="${prod.imagem}" alt="${prod.nome}" onerror="this.src='https://via.placeholder.com/400x180?text=Imagem+Indisponivel'">
+                    <div class="card-conteudo">
+                        <h3>${prod.nome}</h3>
+                        <div class="preco">R$ ${prod.preco}</div>
+                        <p>${prod.descricao}</p>
+                        <button class="btn-comprar" onclick="adicionarAoCarrinho('${prod.nome}', '${prod.preco}')">Adicionar ao Carrinho</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Funções do Carrinho de Compras
+        function adicionarAoCarrinho(nome, preco) {
+            carrinho.push({ nome, preco });
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            alert(`"${nome}" foi adicionado ao carrinho!`);
+        }
+
+        function atualizarContadorCarrinho() {
+            const contador = document.getElementById('contador-carrinho');
+            if (contador) contador.textContent = carrinho.length;
+        }
+
+        function abrirModalCarrinho() {
+            const lista = document.getElementById('lista-carrinho-itens');
+            lista.innerHTML = '';
+
+            if (carrinho.length === 0) {
+                lista.innerHTML = '<p style="text-align:center; padding: 15px;">Seu carrinho está vazio.</p>';
+            } else {
+                carrinho.forEach((item, index) => {
+                    const linha = document.createElement('div');
+                    linha.className = 'item-carrinho-linha';
+                    linha.innerHTML = `
+                        <span>${item.nome} - R$ ${item.preco}</span>
+                        <button type="button" class="btn-remover-item" onclick="removerDoCarrinho(${index})">Remover</button>
+                    `;
+                    lista.appendChild(linha);
+                });
+            }
+
+            document.getElementById('modal-carrinho').style.display = 'flex';
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            abrirModalCarrinho();
+        }
+
+        function finalizarReserva() {
+            if (carrinho.length === 0) {
+                alert("Adicione pelo menos um veículo ao carrinho antes de reservar.");
+                return;
+            }
+            alert("Solicitação de reserva enviada com sucesso! Um consultor da Elite Motors entrará em contato.");
+            carrinho = [];
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            fecharModal('modal-carrinho');
+        }
+    </script>
+</body>
+</html>

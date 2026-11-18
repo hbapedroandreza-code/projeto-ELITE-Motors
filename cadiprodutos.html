@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos - Cardiprodutos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #18181b, #27272a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fefce8;
+            padding: 20px;
+        }
+
+        /* Container principal da tela de cadastro */
+        .painel-cadastro {
+            display: block;
+            background-color: #eab308;
+            padding: 36px 32px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+            border: 2px solid #facc15;
+            color: #18181b;
+        }
+
+        .painel-cadastro h2 {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+            color: #18181b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .painel-cadastro p.subtitulo {
+            font-size: 0.85rem;
+            color: #422006;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #18181b;
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+
+        .painel-cadastro label:first-of-type {
+            margin-top: 0;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 2px solid #ca8a04;
+            background-color: #fef9c3;
+            color: #000000;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #854d0e;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #18181b;
+            box-shadow: 0 0 0 3px rgba(24, 24, 27, 0.25);
+        }
+
+        /* Caixa de pré-visualização da imagem */
+        .preview-container {
+            margin-top: 10px;
+            width: 100%;
+            height: 140px;
+            border: 2px dashed #ca8a04;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #fef9c3;
+        }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* Botão Salvar */
+        .btn-salvar {
+            background-color: #18181b;
+            color: #facc15;
+            margin-top: 24px;
+        }
+
+        .btn-salvar:hover {
+            background-color: #27272a;
+            transform: translateY(-1px);
+        }
+
+        /* Botão Remover Produtos */
+        button[type="button"].btn-remover {
+            background-color: #991b1b;
+            color: #fef2f2;
+            border: none;
+            margin-top: 10px;
+        }
+
+        button[type="button"].btn-remover:hover {
+            background-color: #7f1d1d;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* Botão Ver Histórico */
+        button[type="button"].btn-historico {
+            background-color: #ca8a04;
+            color: #18181b;
+            border: none;
+            margin-top: 10px;
+        }
+
+        button[type="button"].btn-historico:hover {
+            background-color: #a16207;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* Botão Voltar */
+        .btn-secundario {
+            background-color: transparent;
+            color: #18181b;
+            border: 2px solid #18181b;
+            margin-top: 10px;
+        }
+
+        .btn-secundario:hover {
+            background-color: #18181b;
+            color: #facc15;
+        }
+
+        /* Painel da lista de produtos para remover */
+        .lista-remover-box {
+            display: none;
+            margin-top: 14px;
+            padding: 12px;
+            background-color: #fef9c3;
+            border: 2px solid #ca8a04;
+            border-radius: 8px;
+        }
+
+        .lista-remover-box h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #18181b;
+            margin-bottom: 8px;
+        }
+
+        .lista-remover-itens {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 170px;
+            overflow-y: auto;
+        }
+
+        .item-produto-remover {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background-color: #fde047;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #ca8a04;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #18181b;
+        }
+
+        .item-produto-remover span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        button[type="button"].btn-excluir-unidade {
+            width: auto;
+            margin-top: 0;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            background-color: #991b1b;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        button[type="button"].btn-excluir-unidade:hover {
+            background-color: #7f1d1d;
+            color: #ffffff;
+        }
+
+        .aviso-vazio {
+            font-size: 0.85rem;
+            color: #713f12;
+            text-align: center;
+            padding: 4px 0;
+        }
+
+        .mensagem-sucesso {
+            color: #14532d;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* Estilo da Janela Modal de Histórico */
+        .modal-historico {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-conteudo {
+            background-color: #eab308;
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #facc15;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            color: #18181b;
+        }
+
+        .modal-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-cabecalho h3 {
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .btn-fechar-modal {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #18181b;
+            width: auto;
+            padding: 0 8px;
+            margin: 0;
+        }
+
+        .btn-fechar-modal:hover {
+            color: #991b1b;
+            background: none;
+            transform: none;
+        }
+
+        .lista-historico-itens {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 60vh;
+            padding-right: 4px;
+        }
+
+        .item-historico {
+            background-color: #fef9c3;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #ca8a04;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .item-historico-topo {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .item-historico-desc {
+            font-size: 0.85rem;
+            color: #713f12;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAINEL DE CADASTRO DE PRODUTOS / VEÍCULOS -->
+    <div class="painel-cadastro" id="tela-cadastro">
+        <h2>Cadastrar Produto</h2>
+        <p class="subtitulo">Adicione um novo item ao catálogo do site</p>
+
+        <form id="form-produto" autocomplete="off">
+            <label for="nome-produto">Nome do Produto / Veículo</label>
+            <input type="text" id="nome-produto" autocomplete="off" required>
+
+            <label for="preco-produto">Preço (R$)</label>
+            <input type="text" id="preco-produto" autocomplete="off" required>
+
+            <label for="imagem-produto">URL da Imagem</label>
+            <input type="url" id="imagem-produto" placeholder="Cole o link direto da imagem aqui..." autocomplete="off" required>
+
+            <!-- Pré-visualização automática da imagem -->
+            <div class="preview-container" id="preview-box">
+                <img id="imagem-preview" src="" alt="Prévia da imagem">
+            </div>
+
+            <label for="descricao-produto">Descrição / Especificações</label>
+            <textarea id="descricao-produto" autocomplete="off" required></textarea>
+
+            <button type="submit" class="btn-salvar">Salvar Produto</button>
+            <button type="button" class="btn-remover" id="btn-remover-produtos">Remover Produtos</button>
+            <button type="button" class="btn-historico" id="btn-ver-historico">Ver Histórico</button>
+            <button type="button" class="btn-secundario" onclick="window.location.href='index.html'">Voltar para o Site</button>
+
+            <div class="lista-remover-box" id="lista-remover-box">
+                <h3>Selecione o produto para remover</h3>
+                <ul class="lista-remover-itens" id="lista-remover-itens"></ul>
+            </div>
+
+            <div class="mensagem-sucesso" id="sucesso-produto">Produto cadastrado com sucesso!</div>
+        </form>
+    </div>
+
+    <!-- JANELA MODAL DE HISTÓRICO -->
+    <div class="modal-historico" id="modal-historico">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h3>Histórico de Veículos Cadastrados</h3>
+                <button type="button" class="btn-fechar-modal" id="btn-fechar-historico">&times;</button>
+            </div>
+            <ul class="lista-historico-itens" id="lista-historico-itens">
+                <!-- Os itens serão injetados dinamicamente via JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Pré-visualização da imagem otimizada
+        const inputUrlImg = document.getElementById('imagem-produto');
+        const previewBox = document.getElementById('preview-box');
+        const imgPreview = document.getElementById('imagem-preview');
+
+        inputUrlImg.addEventListener('input', function() {
+            const url = this.value.trim();
+            if (url.length > 5) {
+                imgPreview.src = url;
+            } else {
+                previewBox.style.display = 'none';
+                imgPreview.src = '';
+            }
+        });
+
+        imgPreview.onload = function() {
+            if (inputUrlImg.value.trim() !== '') {
+                previewBox.style.display = 'flex';
+            }
+        };
+
+        imgPreview.onerror = function() {
+            previewBox.style.display = 'none';
+        };
+
+        // Funções auxiliares de localStorage
+        function pegarProdutos() {
+            return JSON.parse(localStorage.getItem('produtos')) || [];
+        }
+
+        function gravarProdutos(lista) {
+            localStorage.setItem('produtos', JSON.stringify(lista));
+        }
+
+        // Lógica de salvar e remover produtos
+        const btnRemoverProdutos = document.getElementById('btn-remover-produtos');
+        const listaRemoverBox = document.getElementById('lista-remover-box');
+        const listaRemoverItens = document.getElementById('lista-remover-itens');
+        const msgSucesso = document.getElementById('sucesso-produto');
+
+        function atualizarListaRemover() {
+            const produtos = pegarProdutos();
+            listaRemoverItens.innerHTML = '';
+
+            if (produtos.length === 0) {
+                listaRemoverItens.innerHTML = '<li class="aviso-vazio">Nenhum produto cadastrado.</li>';
+                return;
+            }
+
+            produtos.forEach((produto, index) => {
+                const li = document.createElement('li');
+                li.className = 'item-produto-remover';
+
+                const texto = document.createElement('span');
+                texto.textContent = `${produto.nome} - R$ ${produto.preco}`;
+
+                const btnExcluir = document.createElement('button');
+                btnExcluir.type = 'button';
+                btnExcluir.className = 'btn-excluir-unidade';
+                btnExcluir.textContent = 'Excluir';
+                btnExcluir.addEventListener('click', function() {
+                    const novaLista = pegarProdutos();
+                    novaLista.splice(index, 1);
+                    gravarProdutos(novaLista);
+                    atualizarListaRemover();
+
+                    msgSucesso.textContent = 'Produto removido com sucesso!';
+                    msgSucesso.style.display = 'block';
+                    setTimeout(() => {
+                        msgSucesso.style.display = 'none';
+                    }, 3000);
+                });
+
+                li.appendChild(texto);
+                li.appendChild(btnExcluir);
+                listaRemoverItens.appendChild(li);
+            });
+        }
+
+        btnRemoverProdutos.addEventListener('click', function() {
+            if (listaRemoverBox.style.display === 'block') {
+                listaRemoverBox.style.display = 'none';
+            } else {
+                atualizarListaRemover();
+                listaRemoverBox.style.display = 'block';
+            }
+        });
+
+        document.getElementById('form-produto').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const produto = {
+                nome: document.getElementById('nome-produto').value.trim(),
+                preco: document.getElementById('preco-produto').value.trim(),
+                imagem: document.getElementById('imagem-produto').value.trim(),
+                descricao: document.getElementById('descricao-produto').value.trim()
+            };
+
+            const produtos = pegarProdutos();
+            produtos.push(produto);
+            gravarProdutos(produtos);
+
+            if (listaRemoverBox.style.display === 'block') {
+                atualizarListaRemover();
+            }
+
+            msgSucesso.textContent = 'Produto cadastrado com sucesso!';
+            msgSucesso.style.display = 'block';
+            this.reset();
+            previewBox.style.display = 'none';
+
+            setTimeout(() => {
+                msgSucesso.style.display = 'none';
+            }, 3000);
+        });
+
+        // Lógica da Janela Modal do Histórico
+        const btnVerHistorico = document.getElementById('btn-ver-historico');
+        const modalHistorico = document.getElementById('modal-historico');
+        const btnFecharHistorico = document.getElementById('btn-fechar-historico');
+        const listaHistoricoItens = document.getElementById('lista-historico-itens');
+
+        function abrirHistorico() {
+            const produtos = pegarProdutos();
+            listaHistoricoItens.innerHTML = '';
+
+            if (produtos.length === 0) {
+                listaHistoricoItens.innerHTML = '<li class="aviso-vazio">Nenhum veículo/produto cadastrado no histórico.</li>';
+            } else {
+                produtos.forEach(prod => {
+                    const li = document.createElement('li');
+                    li.className = 'item-historico';
+
+                    const topo = document.createElement('div');
+                    topo.className = 'item-historico-topo';
+                    topo.innerHTML = `<span>${prod.nome}</span> <span>R$ ${prod.preco}</span>`;
+
+                    const desc = document.createElement('div');
+                    desc.className = 'item-historico-desc';
+                    desc.textContent = prod.descricao;
+
+                    li.appendChild(topo);
+                    li.appendChild(desc);
+                    listaHistoricoItens.appendChild(li);
+                });
+            }
+
+            modalHistorico.style.display = 'flex';
+        }
+
+        function fecharHistorico() {
+            modalHistorico.style.display = 'none';
+        }
+
+        btnVerHistorico.addEventListener('click', abrirHistorico);
+        btnFecharHistorico.addEventListener('click', fecharHistorico);
+
+        // Fecha a janela se clicar fora da caixa do modal
+        window.addEventListener('click', function(event) {
+            if (event.target === modalHistorico) {
+                fecharHistorico();
+            }
+        });
+    </script>
+</body>
+</html>
